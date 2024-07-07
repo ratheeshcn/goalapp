@@ -1,48 +1,28 @@
 import React, { cloneElement, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  FlatList,
-} from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 
 import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
 
 export default function App() {
-  const [enteredGoalText, setEnteredGoalText] = useState("");
   const [courseGolas, setCourseGoals] = useState([]);
 
-  function addGoalHandler() {
+  function addGoalHandler(enteredGoalText) {
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
-      { text: enteredGoalText, id: Math.random.toString },
+      { text: enteredGoalText, id: Math.random().toString() },
     ]);
-  }
-
-  function goalInputHandler(enteredText) {
-    setEnteredGoalText(enteredText);
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.textInputContainer}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={goalInputHandler}
-          placeholder="Your course Goal"
-        ></TextInput>
-
-        <Button title="Add Goal" onPress={addGoalHandler}></Button>
-      </View>
-
+      <GoalInput onAddGoal={addGoalHandler} />
       <View style={styles.detailsContainer}>
         <FlatList
           data={courseGolas}
           renderItem={(itemData) => {
-            return <GoalItem item={itemData.item.text} />;
+            return <GoalItem text={itemData.item.text} />;
           }}
           keyExtractor={(item, index) => {
             return item.id;
